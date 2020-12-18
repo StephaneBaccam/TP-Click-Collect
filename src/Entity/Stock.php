@@ -25,14 +25,14 @@ class Stock
     private $quantite;
 
     /**
-     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="stocks")
-     */
-    private $articles;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Magasin::class, inversedBy="stocks")
      */
     private $magasins;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Article::class, cascade={"persist", "remove"})
+     */
+    private $article;
 
     public function __construct()
     {
@@ -56,36 +56,6 @@ class Stock
         return $this;
     }
 
-    /**
-     * @return Collection|Article[]
-     */
-    public function getArticles(): Collection
-    {
-        return $this->articles;
-    }
-
-    public function addArticle(Article $article): self
-    {
-        if (!$this->articles->contains($article)) {
-            $this->articles[] = $article;
-            $article->setStocks($this);
-        }
-
-        return $this;
-    }
-
-    public function removeArticle(Article $article): self
-    {
-        if ($this->articles->removeElement($article)) {
-            // set the owning side to null (unless already changed)
-            if ($article->getStocks() === $this) {
-                $article->setStocks(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getMagasins(): ?Magasin
     {
         return $this->magasins;
@@ -102,5 +72,17 @@ class Stock
     {
 
         return strval($this->id);
+    }
+
+    public function getArticle(): ?Article
+    {
+        return $this->article;
+    }
+
+    public function setArticle(?Article $article): self
+    {
+        $this->article = $article;
+
+        return $this;
     }
 }

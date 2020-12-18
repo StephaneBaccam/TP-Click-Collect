@@ -30,11 +30,6 @@ class Article
     private $utilisateurs;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Stock::class, inversedBy="articles")
-     */
-    private $stocks;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Magasin::class, inversedBy="articles")
      */
     private $magasins;
@@ -89,18 +84,6 @@ class Article
         if ($this->utilisateurs->removeElement($utilisateur)) {
             $utilisateur->removeArticle($this);
         }
-
-        return $this;
-    }
-
-    public function getStocks(): ?Stock
-    {
-        return $this->stocks;
-    }
-
-    public function setStocks(?Stock $stocks): self
-    {
-        $this->stocks = $stocks;
 
         return $this;
     }
