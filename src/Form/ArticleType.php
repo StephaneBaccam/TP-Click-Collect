@@ -14,7 +14,6 @@ class ArticleType extends AbstractType
         $builder
             ->add('nom')
             ->add('utilisateurs')
-            ->add('magasins')
         ;
     }
 

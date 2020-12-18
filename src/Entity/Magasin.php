@@ -25,14 +25,14 @@ class Magasin
     private $nom;
 
     /**
-     * @ORM\OneToMany(targetEntity=Stock::class, mappedBy="magasins")
-     */
-    private $stocks;
-
-    /**
      * @ORM\OneToMany(targetEntity=Article::class, mappedBy="magasins")
      */
     private $articles;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Stock::class, mappedBy="magasin")
+     */
+    private $stocks;
 
     public function __construct()
     {
@@ -63,36 +63,6 @@ class Magasin
     }
 
     /**
-     * @return Collection|Stock[]
-     */
-    public function getStocks(): Collection
-    {
-        return $this->stocks;
-    }
-
-    public function addStock(Stock $stock): self
-    {
-        if (!$this->stocks->contains($stock)) {
-            $this->stocks[] = $stock;
-            $stock->setMagasins($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStock(Stock $stock): self
-    {
-        if ($this->stocks->removeElement($stock)) {
-            // set the owning side to null (unless already changed)
-            if ($stock->getMagasins() === $this) {
-                $stock->setMagasins(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Article[]
      */
     public function getArticles(): Collection
@@ -116,6 +86,36 @@ class Magasin
             // set the owning side to null (unless already changed)
             if ($article->getMagasins() === $this) {
                 $article->setMagasins(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Stock[]
+     */
+    public function getStocks(): Collection
+    {
+        return $this->stocks;
+    }
+
+    public function addStock(Stock $stock): self
+    {
+        if (!$this->stocks->contains($stock)) {
+            $this->stocks[] = $stock;
+            $stock->setMagasin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStock(Stock $stock): self
+    {
+        if ($this->stocks->removeElement($stock)) {
+            // set the owning side to null (unless already changed)
+            if ($stock->getMagasin() === $this) {
+                $stock->setMagasin(null);
             }
         }
 

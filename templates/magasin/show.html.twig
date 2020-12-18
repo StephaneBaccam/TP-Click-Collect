@@ -18,12 +18,11 @@
         </tbody>
     </table>
 
-
     <h2>Articles</h2>
-    {% for article in magasin.articles %}
-        {{ article.nom }}
-    {% endfor %}
-    
+        {% for stock in magasin.stocks %}
+            {{ stock.article.nom }} - {{ stock.quantite }}
+        {% endfor %}
+
     <a href="{{ path('magasin_index') }}">back to list</a>
 
     <a href="{{ path('magasin_edit', {'id': magasin.id}) }}">edit</a>

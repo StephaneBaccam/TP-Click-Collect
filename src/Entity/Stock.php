@@ -25,18 +25,18 @@ class Stock
     private $quantite;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Magasin::class, inversedBy="stocks")
-     */
-    private $magasins;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Article::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Article::class, inversedBy="stocks")
      */
     private $article;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Magasin::class, inversedBy="stocks")
+     */
+    private $magasin;
+
     public function __construct()
     {
-        $this->articles = new ArrayCollection();
+        
     }
 
     public function getId(): ?int
@@ -56,18 +56,6 @@ class Stock
         return $this;
     }
 
-    public function getMagasins(): ?Magasin
-    {
-        return $this->magasins;
-    }
-
-    public function setMagasins(?Magasin $magasins): self
-    {
-        $this->magasins = $magasins;
-
-        return $this;
-    }
-
     public function __toString()
     {
 
@@ -82,6 +70,18 @@ class Stock
     public function setArticle(?Article $article): self
     {
         $this->article = $article;
+
+        return $this;
+    }
+
+    public function getMagasin(): ?Magasin
+    {
+        return $this->magasin;
+    }
+
+    public function setMagasin(?Magasin $magasin): self
+    {
+        $this->magasin = $magasin;
 
         return $this;
     }

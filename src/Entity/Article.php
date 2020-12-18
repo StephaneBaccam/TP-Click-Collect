@@ -30,13 +30,14 @@ class Article
     private $utilisateurs;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Magasin::class, inversedBy="articles")
+     * @ORM\OneToMany(targetEntity=Stock::class, mappedBy="article")
      */
-    private $magasins;
+    private $stocks;
 
     public function __construct()
     {
         $this->utilisateurs = new ArrayCollection();
+        $this->stocks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -88,14 +89,32 @@ class Article
         return $this;
     }
 
-    public function getMagasins(): ?Magasin
+    /**
+     * @return Collection|Stock[]
+     */
+    public function getStocks(): Collection
     {
-        return $this->magasins;
+        return $this->stocks;
     }
 
-    public function setMagasins(?Magasin $magasins): self
+    public function addStock(Stock $stock): self
     {
-        $this->magasins = $magasins;
+        if (!$this->stocks->contains($stock)) {
+            $this->stocks[] = $stock;
+            $stock->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStock(Stock $stock): self
+    {
+        if ($this->stocks->removeElement($stock)) {
+            // set the owning side to null (unless already changed)
+            if ($stock->getArticle() === $this) {
+                $stock->setArticle(null);
+            }
+        }
 
         return $this;
     }
