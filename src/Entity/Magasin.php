@@ -29,6 +29,11 @@ class Magasin
      */
     private $stocks;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="magasins")
+     */
+    private $articles;
+
     public function __construct()
     {
         $this->stocks = new ArrayCollection();

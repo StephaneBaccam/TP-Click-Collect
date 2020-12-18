@@ -34,6 +34,11 @@ class Article
      */
     private $stocks;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Magasin::class, inversedBy="articles")
+     */
+    private $magasins;
+
     public function __construct()
     {
         $this->utilisateurs = new ArrayCollection();
