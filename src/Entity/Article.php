@@ -25,18 +25,18 @@ class Article
     private $nom;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToMany(targetEntity=Utilisateur::class, mappedBy="articles")
      */
-    private $quantite;
+    private $utilisateurs;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Magasin::class, inversedBy="articles")
+     * @ORM\ManyToOne(targetEntity=Stock::class, inversedBy="articles")
      */
-    private $magasin;
+    private $stocks;
 
     public function __construct()
     {
-        $this->magasin = new ArrayCollection();
+        $this->utilisateurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -56,44 +56,59 @@ class Article
         return $this;
     }
 
-    public function getQuantite(): ?int
+    public function __toString()
     {
-        return $this->quantite;
-    }
-
-    public function setQuantite(int $quantite): self
-    {
-        $this->quantite = $quantite;
-
-        return $this;
+        return $this->nom;
     }
 
     /**
-     * @return Collection|Magasin[]
+     * @return Collection|Utilisateur[]
      */
-    public function getMagasin(): Collection
+    public function getUtilisateurs(): Collection
     {
-        return $this->magasin;
+        return $this->utilisateurs;
     }
 
-    public function addMagasin(Magasin $magasin): self
+    public function addUtilisateur(Utilisateur $utilisateur): self
     {
-        if (!$this->magasin->contains($magasin)) {
-            $this->magasin[] = $magasin;
+        if (!$this->utilisateurs->contains($utilisateur)) {
+            $this->utilisateurs[] = $utilisateur;
+            $utilisateur->addArticle($this);
         }
 
         return $this;
     }
 
-    public function removeMagasin(Magasin $magasin): self
+    public function removeUtilisateur(Utilisateur $utilisateur): self
     {
-        $this->magasin->removeElement($magasin);
+        if ($this->utilisateurs->removeElement($utilisateur)) {
+            $utilisateur->removeArticle($this);
+        }
 
         return $this;
     }
 
-    public function __toString()
+    public function getStocks(): ?Stock
     {
-        return $this->nom;
+        return $this->stocks;
+    }
+
+    public function setStocks(?Stock $stocks): self
+    {
+        $this->stocks = $stocks;
+
+        return $this;
+    }
+
+    public function getMagasins(): ?Magasin
+    {
+        return $this->magasins;
+    }
+
+    public function setMagasins(?Magasin $magasins): self
+    {
+        $this->magasins = $magasins;
+
+        return $this;
     }
 }

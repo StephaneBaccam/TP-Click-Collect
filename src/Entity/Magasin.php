@@ -25,12 +25,13 @@ class Magasin
     private $nom;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Article::class, mappedBy="magasin")
+     * @ORM\OneToMany(targetEntity=Stock::class, mappedBy="magasins")
      */
-    private $articles;
+    private $stocks;
 
     public function __construct()
     {
+        $this->stocks = new ArrayCollection();
         $this->articles = new ArrayCollection();
     }
 
@@ -51,6 +52,41 @@ class Magasin
         return $this;
     }
 
+    public function __toString()
+    {
+        return $this->nom;
+    }
+
+    /**
+     * @return Collection|Stock[]
+     */
+    public function getStocks(): Collection
+    {
+        return $this->stocks;
+    }
+
+    public function addStock(Stock $stock): self
+    {
+        if (!$this->stocks->contains($stock)) {
+            $this->stocks[] = $stock;
+            $stock->setMagasins($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStock(Stock $stock): self
+    {
+        if ($this->stocks->removeElement($stock)) {
+            // set the owning side to null (unless already changed)
+            if ($stock->getMagasins() === $this) {
+                $stock->setMagasins(null);
+            }
+        }
+
+        return $this;
+    }
+
     /**
      * @return Collection|Article[]
      */
@@ -63,7 +99,7 @@ class Magasin
     {
         if (!$this->articles->contains($article)) {
             $this->articles[] = $article;
-            $article->addMagasin($this);
+            $article->setMagasins($this);
         }
 
         return $this;
@@ -72,14 +108,12 @@ class Magasin
     public function removeArticle(Article $article): self
     {
         if ($this->articles->removeElement($article)) {
-            $article->removeMagasin($this);
+            // set the owning side to null (unless already changed)
+            if ($article->getMagasins() === $this) {
+                $article->setMagasins(null);
+            }
         }
 
         return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->nom;
     }
 }

@@ -1,26 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Article index{% endblock %}
+{% block title %}Stock index{% endblock %}
 
 {% block body %}
-    <h1>Article index</h1>
+    <h1>Stock index</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Nom</th>
+                <th>Quantite</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for article in articles %}
+        {% for stock in stocks %}
             <tr>
-                <td>{{ article.id }}</td>
-                <td>{{ article.nom }}</td>
+                <td>{{ stock.id }}</td>
+                <td>{{ stock.quantite }}</td>
                 <td>
-                    <a href="{{ path('article_show', {'id': article.id}) }}">show</a>
-                    <a href="{{ path('article_edit', {'id': article.id}) }}">edit</a>
+                    <a href="{{ path('stock_show', {'id': stock.id}) }}">show</a>
+                    <a href="{{ path('stock_edit', {'id': stock.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -31,5 +31,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('article_new') }}">Create new</a>
+    <a href="{{ path('stock_new') }}">Create new</a>
 {% endblock %}

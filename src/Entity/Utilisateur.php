@@ -6,11 +6,12 @@ use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UtilisateurRepository::class)
  */
-class Utilisateur
+class Utilisateur implements UserInterface
 {
     /**
      * @ORM\Id
@@ -20,28 +21,29 @@ class Utilisateur
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $nom;
+    private $email;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="json")
      */
-    private $role;
+    private $roles = [];
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string The hashed password
+     * @ORM\Column(type="string")
      */
     private $password;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Reservation::class, mappedBy="nom_client")
+     * @ORM\ManyToMany(targetEntity=Article::class, inversedBy="utilisateurs")
      */
-    private $reservations;
+    private $articles;
 
     public function __construct()
     {
-        $this->reservations = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -49,36 +51,56 @@ class Utilisateur
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getEmail(): ?string
     {
-        return $this->nom;
+        return $this->email;
     }
 
-    public function setNom(string $nom): self
+    public function setEmail(string $email): self
     {
-        $this->nom = $nom;
+        $this->email = $email;
 
         return $this;
     }
 
-    public function getRole(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
     {
-        return $this->role;
+        return (string) $this->email;
     }
 
-    public function setRole(string $role): self
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
     {
-        $this->role = $role;
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
     {
-        return $this->password;
+        return (string) $this->password;
     }
 
-    public function setPassword(?string $password): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
@@ -86,28 +108,42 @@ class Utilisateur
     }
 
     /**
-     * @return Collection|Reservation[]
+     * @see UserInterface
      */
-    public function getReservations(): Collection
+    public function getSalt()
     {
-        return $this->reservations;
+        // not needed when using the "bcrypt" algorithm in security.yaml
     }
 
-    public function addReservation(Reservation $reservation): self
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
     {
-        if (!$this->reservations->contains($reservation)) {
-            $this->reservations[] = $reservation;
-            $reservation->addNomClient($this);
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Article[]
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Article $article): self
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles[] = $article;
         }
 
         return $this;
     }
 
-    public function removeReservation(Reservation $reservation): self
+    public function removeArticle(Article $article): self
     {
-        if ($this->reservations->removeElement($reservation)) {
-            $reservation->removeNomClient($this);
-        }
+        $this->articles->removeElement($article);
 
         return $this;
     }
