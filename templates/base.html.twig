@@ -6,7 +6,17 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <div style="float: right">
+                <a href="">Panier</a>
+                <a href="{{path('magasin_index')}}">Voir les magasins</a>
+                <a href="{{path('message_new')}}">Contacter un admin</a>
+                <a href="{{path('app_register')}}">S'inscrire</a>
+                <a href="{{path('app_login')}}">Se Connecter</a>
+        </div>
+        
+        {% block body %}
+            
+        {% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>
