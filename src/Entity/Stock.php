@@ -25,17 +25,17 @@ class Stock
     private $quantite;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Article::class, inversedBy="stocks", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Article::class, inversedBy="stocks")
      */
     private $article;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Magasin::class, inversedBy="stocks", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Magasin::class, inversedBy="stocks")
      */
     private $magasin;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Commande::class, mappedBy="stocks")
+     * @ORM\OneToMany(targetEntity=Commande::class, mappedBy="stock")
      */
     private $commandes;
 
@@ -103,7 +103,7 @@ class Stock
     {
         if (!$this->commandes->contains($commande)) {
             $this->commandes[] = $commande;
-            $commande->addStock($this);
+            $commande->setStock($this);
         }
 
         return $this;
@@ -112,7 +112,10 @@ class Stock
     public function removeCommande(Commande $commande): self
     {
         if ($this->commandes->removeElement($commande)) {
-            $commande->removeStock($this);
+            // set the owning side to null (unless already changed)
+            if ($commande->getStock() === $this) {
+                $commande->setStock(null);
+            }
         }
 
         return $this;

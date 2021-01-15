@@ -25,13 +25,18 @@ class Commande
     private $utilisateur;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Stock::class, inversedBy="commandes", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Stock::class, inversedBy="commandes")
      */
-    private $stocks;
+    private $stock;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $quantite;
+
 
     public function __construct()
     {
-        $this->stocks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -51,26 +56,26 @@ class Commande
         return $this;
     }
 
-    /**
-     * @return Collection|Stock[]
-     */
-    public function getStocks(): Collection
+    public function getStock(): ?Stock
     {
-        return $this->stocks;
+        return $this->stock;
     }
 
-    public function addStock(Stock $stock): self
+    public function setStock(?Stock $stock): self
     {
-        if (!$this->stocks->contains($stock)) {
-            $this->stocks[] = $stock;
-        }
+        $this->stock = $stock;
 
         return $this;
     }
 
-    public function removeStock(Stock $stock): self
+    public function getQuantite(): ?int
     {
-        $this->stocks->removeElement($stock);
+        return $this->quantite;
+    }
+
+    public function setQuantite(int $quantite): self
+    {
+        $this->quantite = $quantite;
 
         return $this;
     }

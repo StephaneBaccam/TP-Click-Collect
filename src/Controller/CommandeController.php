@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Commande;
+use App\Entity\Stock;
 use App\Form\CommandeType;
 use App\Repository\CommandeRepository;
 use App\Repository\StockRepository;
@@ -59,23 +60,25 @@ class CommandeController extends AbstractController
                 $userId = $this->getUser()->getId();
                 $entityManager = $this->getDoctrine()->getManager();
                 $commande = new Commande();
-                foreach($panierWithData as $item) {
-                    $stock = $item[array_key_first($item)];
-                    $commande->addStock($stock);
-                }
                 $commande->setUtilisateur($user);
+                foreach($panierWithData as $item) {
+                    $stock = $item['stock'];
+                    $quantite = $item['quantiteDansPanier'];
+                    $commande->setStock($entityManager->getRepository(Stock::class)->findOneById($stock));
+                    $commande->setQuantite($quantite);
+                }
                 $entityManager->persist($commande);
                 $entityManager->flush();
     
                 $session->set('panier', []);
                 $session->set('panierWithData', []);
+
+                return $this->redirectToRoute('magasin_index');
             }
             else {
                 return $this->redirectToRoute('magasin_index');
             }
-            
         }
-        dd($commande);
     }
 
     /**
