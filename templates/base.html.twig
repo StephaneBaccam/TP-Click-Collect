@@ -7,15 +7,21 @@
     </head>
     <body>
         <div style="float: right">
-                <a href="">Panier</a>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %} 
+                Bonjour {{app.user.username}}
+                <a href="{{path('commande_index')}}">Voir mon panier</a>
+                <a href="{{path('magasin_index')}}">Voir les magasins</a>
+                <a href="{{path('message_new')}}">Contacter un admin</a>
+                <a href="{{path('app_logout')}}">Se Déconnecter</a>
+            {% else %}
                 <a href="{{path('magasin_index')}}">Voir les magasins</a>
                 <a href="{{path('message_new')}}">Contacter un admin</a>
                 <a href="{{path('app_register')}}">S'inscrire</a>
                 <a href="{{path('app_login')}}">Se Connecter</a>
+            {% endif %}
         </div>
         
         {% block body %}
-            
         {% endblock %}
         {% block javascripts %}{% endblock %}
     </body>

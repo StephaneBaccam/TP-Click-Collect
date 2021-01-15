@@ -3,24 +3,21 @@
 {% block title %}Magasin index{% endblock %}
 
 {% block body %}
-    <h1>Magasin index</h1>
+    <h1>Liste des magasins</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nom</th>
-                <th>actions</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
         {% for magasin in magasins %}
             <tr>
-                <td>{{ magasin.id }}</td>
                 <td>{{ magasin.nom }}</td>
                 <td>
-                    <a href="{{ path('magasin_show', {'id': magasin.id}) }}">show</a>
-                    <a href="{{ path('magasin_edit', {'id': magasin.id}) }}">edit</a>
+                    <a href="{{ path('magasin_show', {'id': magasin.id}) }}">Vers le magasin</a>
                 </td>
             </tr>
         {% else %}
@@ -31,5 +28,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('magasin_new') }}">Create new</a>
+    <!-- <a href="{{ path('magasin_new') }}">Create new</a> -->
 {% endblock %}

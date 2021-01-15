@@ -51,6 +51,12 @@ class Reservation
         return $this;
     }
 
+    public function __toString()
+    {
+        $date = $this->date;
+        return $date->format('Y-m-d H:i:s');
+    }
+
     /**
      * @return Collection|Utilisateur[]
      */

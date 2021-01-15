@@ -3,28 +3,29 @@
 {% block title %}Magasin{% endblock %}
 
 {% block body %}
-    <h1>Magasin</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ magasin.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ magasin.nom }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <h1>{{ magasin.nom }}</h1>
     <h2>Articles</h2>
-        {% for stock in magasin.stocks %}
-            {{ stock.article.nom }} - {{ stock.quantite }}
-        {% endfor %}
+        <div class="articles">
+            <ul>
+                {% for stock in magasin.stocks %}
+                    {% if stock.quantite == 0 %}
+                        <li style="text-decoration: line-through"><em>{{ stock.article.nom }} - {{ stock.quantite }}</em></li> 
+                    {% else %}
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        <li>{{ stock.article.nom }} - {{ stock.quantite }} <a href="{{ path('commande_add', { 'id': stock.id }) }}">Commander</a></li> 
+                    {% else %}
+                        <li>{{ stock.article.nom }} - {{ stock.quantite }} <a href="{{ path('app_login') }}">Commander</a></li> 
+                    {% endif %}
+                        
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        
 
     <a href="{{ path('magasin_index') }}">back to list</a>
 
-    <a href="{{ path('magasin_edit', {'id': magasin.id}) }}">edit</a>
+    <!-- <a href="{{ path('magasin_edit', {'id': magasin.id}) }}">edit</a> -->
 
-    {{ include('magasin/_delete_form.html.twig') }}
+    <!-- {{ include('magasin/_delete_form.html.twig') }} -->
 {% endblock %}

@@ -38,6 +38,7 @@ class Magasin
     {
         $this->stocks = new ArrayCollection();
         $this->articles = new ArrayCollection();
+        $this->commandes = new ArrayCollection();
     }
 
     public function getId(): ?int

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande{% endblock %}
+
+{% block body %}
+    <h1>Votre panier</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    Article
+                </th>
+                <th>
+                    Magasin
+                </th>
+                <th>
+                    Quantité
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in panier %}
+                <tr>
+                    <td>{{ item.stock.article }}</td>
+                    <td>{{ item.stock.magasin }}</td>
+                    <td>{{ item.quantiteDansPanier }}</td>
+                    <td><a href="{{ path('commande_remove', {'id': item.stock.id}) }}"><button>-</button></a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ path('commande_new') }}">Commander</a>
+    
+{% endblock %}
