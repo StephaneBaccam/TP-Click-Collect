@@ -22,9 +22,15 @@ class ReservationController extends AbstractController
      */
     public function index(ReservationRepository $reservationRepository, CommandeRepository $commandeRepository, UserInterface $user = null): Response
     {
-        return $this->render('reservation/index.html.twig', [
-            'reservations' => $reservationRepository->findAll(),
-        ]);
+        if($user == null) {
+            return $this->redirectToRoute('app_register');
+        }
+        else {
+            return $this->render('reservation/index.html.twig', [
+                'reservations' => $reservationRepository->findAll(),
+                'commandes' => $commandeRepository->findByUtilisateur($user),
+            ]);
+        }
     }
 
     /**

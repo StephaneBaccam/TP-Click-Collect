@@ -3,33 +3,27 @@
 {% block title %}Reservation index{% endblock %}
 
 {% block body %}
-    <h1>Reservation index</h1>
+    <h1>Reservation</h1>
 
-    <table class="table">
+    <h2>Vos Commandes</h2>
+    <table>
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Date</th>
-                <th>actions</th>
+                <th>Magasin</th>
+                <th>Article</th>
+                <th>Quantité</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-        {% for reservation in reservations %}
-            <tr>
-                <td>{{ reservation.id }}</td>
-                <td>{{ reservation.date ? reservation.date|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('reservation_show', {'id': reservation.id}) }}">show</a>
-                    <a href="{{ path('reservation_edit', {'id': reservation.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
+            {% for commande in commandes %}
+                <tr>
+                    <td>{{commande.stock.magasin.nom}}</td>
+                    <td>{{commande.stock.article.nom}}</td>
+                    <td>{{commande.quantite}}</td>
+                    <td><a href="">Réserver</a></td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('reservation_new') }}">Create new</a>
 {% endblock %}

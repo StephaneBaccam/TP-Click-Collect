@@ -6,26 +6,43 @@
     <h1>{{ magasin.nom }}</h1>
     <h2>Articles</h2>
         <div class="articles">
-            <ul>
-                {% for stock in magasin.stocks %}
-                    {% if stock.quantite == 0 %}
-                        <li style="text-decoration: line-through"><em>{{ stock.article.nom }} - {{ stock.quantite }}</em></li> 
-                    {% else %}
-                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                        <li>{{ stock.article.nom }} - {{ stock.quantite }} <a href="{{ path('commande_add', { 'id': stock.id }) }}">Commander</a></li> 
-                    {% else %}
-                        <li>{{ stock.article.nom }} - {{ stock.quantite }} <a href="{{ path('app_login') }}">Commander</a></li> 
-                    {% endif %}
-                        
-                    {% endif %}
-                {% endfor %}
-            </ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Article</th>
+                        <th>Quantité</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    {% for stock in magasin.stocks %}
+                    <tr>
+                    
+                        {% if stock.quantite == 0 %}
+
+                            <td style="text-decoration: line-through"><em>{{ stock.article.nom }}</em></td> 
+                            <td style="text-decoration: line-through"><em>{{ stock.quantite }}</em></td> 
+
+                        {% else %}
+
+                            <td>{{ stock.article.nom }}</td>
+                            <td>{{ stock.quantite }}</td> 
+
+                                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                                    <td><a href="{{ path('commande_add', { 'id': stock.id }) }}">Commander</a></td>  
+                                {% else %}
+                                    <td><a href="{{ path('app_login') }}">Commander</a></td> 
+
+                            {% endif %}
+
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
         
 
-    <a href="{{ path('magasin_index') }}">back to list</a>
-
-    <!-- <a href="{{ path('magasin_edit', {'id': magasin.id}) }}">edit</a> -->
-
-    <!-- {{ include('magasin/_delete_form.html.twig') }} -->
+    <a href="{{ path('magasin_index') }}">Retour</a>
 {% endblock %}

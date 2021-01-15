@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @Route("/message")
@@ -18,10 +19,10 @@ class MessageController extends AbstractController
     /**
      * @Route("/", name="message_index", methods={"GET"})
      */
-    public function index(MessageRepository $messageRepository): Response
+    public function index(MessageRepository $messageRepository, UserInterface $user = null): Response
     {
         return $this->render('message/index.html.twig', [
-            'messages' => $messageRepository->findAll(),
+            'messages' => $messageRepository->findByMessageTo($user),
         ]);
     }
 
